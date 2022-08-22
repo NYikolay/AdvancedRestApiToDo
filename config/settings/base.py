@@ -26,6 +26,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
+CORS_ORIGIN_WHITELIST = [
+    'http://127.0.0.1:3000',
+    'http://localhost:3000',
+    'http://192.168.1.103:3000',
+]
+CORS_ORIGIN_ALLOW_ALL = True
+
 
 # Application definition
 
@@ -56,6 +63,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = 'config.urls'
