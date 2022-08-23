@@ -45,7 +45,7 @@ class CustomUser(AbstractBaseUser):
     """
     Custom User Model
     """
-    username = models.CharField(max_length=255, unique=True, verbose_name='Username')
+    username = models.CharField(max_length=255, unique=True, null=True, blank=True, verbose_name='Username')
     email = models.EmailField(validators=[validators.validate_email], unique=True, blank=False, verbose_name='Email')
     first_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='User First Name')
     last_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='User Last Name')

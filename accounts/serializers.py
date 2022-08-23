@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
+from rest_framework_simplejwt.exceptions import InvalidToken
+from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 
 from accounts.models import CustomUser
 
@@ -17,7 +19,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ('id', 'username', 'password', 'password2', 'email', 'first_name', 'last_name')
+        fields = ('id', 'password', 'password2', 'email',)
         write_only_fields = ('password',)
         read_only_fields = ('id',)
 
@@ -32,13 +34,21 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         """Creating user object if data is valid"""
         user = CustomUser.objects.create(
-            username=validated_data['username'],
             email=validated_data['email'],
-            first_name=validated_data['first_name'],
-            last_name=validated_data['last_name']
         )
 
         user.set_password(validated_data['password'])
         user.save()
 
         return user
+
+
+class CookieTokenRefreshSerializer(TokenRefreshSerializer):
+    refresh = None
+
+    def validate(self, attrs):
+        attrs['refresh'] = self.context['request'].COOKIES.get('refresh_token')
+        if attrs['refresh']:
+            return super().validate(attrs)
+        else:
+            raise InvalidToken('No valid token found in cookie \'refresh_token\'')
