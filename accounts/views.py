@@ -16,6 +16,9 @@ class CreateUser(CreateAPIView):
 
 
 class CookieTokenObtainPairView(TokenObtainPairView):
+    """
+    Writing refresh token into cookies and removing it from the response body
+    """
     def finalize_response(self, request, response, *args, **kwargs):
         if response.data.get('refresh'):
             cookie_max_age = 3600 * 24 * 14 # 14 days
@@ -25,6 +28,7 @@ class CookieTokenObtainPairView(TokenObtainPairView):
 
 
 class CookieTokenRefreshView(TokenRefreshView):
+
     def finalize_response(self, request, response, *args, **kwargs):
         if response.data.get('refresh'):
             cookie_max_age = 3600 * 24 * 14 # 14 days
