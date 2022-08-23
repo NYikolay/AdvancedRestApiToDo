@@ -24,6 +24,8 @@ schema_view = swagger_get_schema_view(
         title='ToDo API',
         default_version='1.0.0',
         description='API documentation for App',
+        contact=openapi.Contact(email="contact@todo.local"),
+        license=openapi.License(name="BSD License"),
     ),
     public=True
 )
