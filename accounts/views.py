@@ -4,7 +4,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from accounts.models import CustomUser
-from accounts.serializers import UserSerializer, CookieTokenRefreshSerializer
+from accounts.serializers import UserSerializer
 
 
 # Create your views here.
