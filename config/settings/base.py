@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     'main',
 ]
 
+SESSION_COOKIE_DOMAIN = '.dev.localhost'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
