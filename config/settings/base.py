@@ -54,7 +54,7 @@ INSTALLED_APPS = [
     'main',
 ]
 
-SESSION_COOKIE_DOMAIN = '.dev.localhost'
+SESSION_COOKIE_DOMAIN = '.todo-app-eta-sable.vercel.app'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
