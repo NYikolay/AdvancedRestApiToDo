@@ -15,6 +15,9 @@ class CategoryViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return self.request.user.categories.all()
 
+    def create(self, request, *args, **kwargs):
+        super().create(request,)
+
 
 class TaskViewSet(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
@@ -23,11 +26,9 @@ class TaskViewSet(viewsets.ModelViewSet):
     search_fields = ['name']
 
     def get_queryset(self):
-        try:
-            category = self.request.query_params.get('category')
-            queryset = Task.objects.filter(owner=self.request.user, category__id=category)
-        except:
-            queryset = self.request.user.owner_tasks.all()
-
-        return queryset
+        category = self.request.query_params.get('category')
+        if category:
+            return Task.objects.filter(owner=self.request.user, category__id=category)
+        else:
+            return self.request.user.owner_tasks.all()
 
