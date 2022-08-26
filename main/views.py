@@ -15,9 +15,6 @@ class CategoryViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return self.request.user.categories.all()
 
-    def create(self, request, *args, **kwargs):
-        super().create(request,)
-
 
 class TaskViewSet(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
