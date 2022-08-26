@@ -43,7 +43,8 @@ class Task(models.Model):
                               verbose_name='Владелец задания')
     name = models.CharField(max_length=625, verbose_name='Название задания')
     category = models.ForeignKey(Category,
-                                 on_delete=models.CASCADE,
+                                 on_delete=models.SET_NULL,
+                                 null=True,
                                  related_name='tasks',
                                  verbose_name='Категория задания')
     priority = models.CharField(max_length=56,

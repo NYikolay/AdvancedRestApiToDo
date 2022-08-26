@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets, filters
 
-from main.models import Category
+from main.models import Category, Task
 from main.permissions import IsOwner
 from main.serializers import CategorySerializer, TaskSerializer
 
@@ -23,5 +23,11 @@ class TaskViewSet(viewsets.ModelViewSet):
     search_fields = ['name']
 
     def get_queryset(self):
-        return self.request.user.owner_tasks.all()
+        try:
+            category = self.request.query_params.get('category')
+            queryset = Task.objects.filter(owner=self.request.user, category__id=category)
+        except:
+            queryset = self.request.user.owner_tasks.all()
+
+        return queryset
 
