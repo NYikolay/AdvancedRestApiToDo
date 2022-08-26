@@ -6,10 +6,11 @@ from main.models import Category, Task
 
 
 class CategorySerializer(serializers.ModelSerializer):
+    get_incomplete_tasks = serializers.ReadOnlyField()
 
     class Meta:
         model = Category
-        fields = ['name', 'id']
+        fields = ['name', 'id', 'get_incomplete_tasks']
         read_only_fields = ('id',)
 
     def create(self, validated_data):

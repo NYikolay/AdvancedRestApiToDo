@@ -24,6 +24,11 @@ class Category(models.Model):
         verbose_name_plural = 'Категории'
         ordering = ['name']
 
+    def get_incomplete_tasks(self):
+        count = Task.objects.filter(category__id=self.id, is_done=False).count()
+
+        return count
+
 
 class Task(models.Model):
     """
