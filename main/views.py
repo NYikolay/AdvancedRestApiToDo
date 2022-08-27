@@ -32,8 +32,8 @@ class TaskViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         """
-        If the ?category=id parameter came in, it returns jobs depending
-        on the current category otherwise it returns all jobs of the current user
+        If the ?category=id parameter came in, it returns tasks depending
+        on the current category otherwise it returns all tasks of the current user
         """
         category = self.request.query_params.get('category')
         if category:
@@ -44,7 +44,7 @@ class TaskViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def get_incomplete(self, request):
         """
-        Return incomplete tasks for current user
+        Return all incomplete tasks for current user
         """
         count = Task.objects.filter(owner=self.request.user, is_done=False).count()
 
