@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 
-from main.models import Category, Task
+from main.models import Category, Task, Priority
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -44,3 +44,22 @@ class TaskSerializer(serializers.ModelSerializer):
 
         category.save()
         return category
+
+
+class PrioritySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Priority
+        fields = '__all__'
+        read_only_fields = ('id', 'owner')
+
+    def create(self, validated_data):
+        request = self.context.get('request')
+        priority = Priority.objects.create(
+            name=validated_data['name'],
+            owner=request.user,
+            color=validated_data['color'],
+        )
+
+        priority.save()
+        return priority

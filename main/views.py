@@ -8,7 +8,7 @@ from rest_framework.response import Response
 
 from main.models import Category, Task
 from main.permissions import IsOwner
-from main.serializers import CategorySerializer, TaskSerializer
+from main.serializers import CategorySerializer, TaskSerializer, PrioritySerializer
 
 import json
 
@@ -53,6 +53,14 @@ class TaskViewSet(viewsets.ModelViewSet):
         }
 
         return Response(data)
+
+
+class PriorityViewSet(viewsets.ModelViewSet):
+    serializer_class = PrioritySerializer
+    permission_classes = [IsOwner]
+
+    def get_queryset(self):
+        return self.request.user.owner_priority.all()
 
 
 

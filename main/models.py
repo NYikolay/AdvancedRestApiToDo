@@ -30,17 +30,27 @@ class Category(models.Model):
         return count
 
 
+class Priority(models.Model):
+    name = models.CharField(max_length=256, default='Без приоритета', verbose_name='Приоритет задачи')
+    owner = models.ForeignKey(CustomUser,
+                              on_delete=models.CASCADE,
+                              related_name='owner_priority',
+                              verbose_name='Владелец приоритета')
+    color = models.CharField(max_length=7, null=True, verbose_name='Цвет приоритета')
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Приоритет'
+        verbose_name_plural = 'Приоритеты'
+        ordering = ['name']
+
+
 class Task(models.Model):
     """
     Model for todo task
     """
-
-    class Priority(models.TextChoices):
-        NOPR = 'Без приоритета', _('Без приоритета')
-        LOW = 'Низкий', _('Низкий')
-        MEDIUM = 'Средний', _('Средний')
-        HIGH = 'Высокий', _('Высокий')
-        URGENT = 'Очень срочно', _('Очень срочно')
 
     owner = models.ForeignKey(CustomUser,
                               on_delete=models.CASCADE,
@@ -52,10 +62,10 @@ class Task(models.Model):
                                  null=True,
                                  related_name='tasks',
                                  verbose_name='Категория задания')
-    priority = models.CharField(max_length=56,
-                                choices=Priority.choices,
-                                default=Priority.NOPR,
-                                verbose_name='Приоритет задачи')
+    priority = models.ForeignKey(Priority,
+                                 on_delete=models.SET_NULL,
+                                 null=True,
+                                 verbose_name='Приоритет задачи')
     due_date = models.DateField('Срок выполнения')
     is_done = models.BooleanField('Выполнено ли задание')
     created_at = models.DateTimeField(auto_now=True)
