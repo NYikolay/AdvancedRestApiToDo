@@ -4,6 +4,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, filters, status
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -66,22 +67,25 @@ class PriorityViewSet(viewsets.ModelViewSet):
 
 
 class TaskStatistic(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = (IsOwner, )
 
-    def get(self, request, format=None):
-        current_category = request.query_params.get("category", None)
-        try:
-            tasks = Task.objects.filter(category_id=current_category).count()
-            tasks_done = Task.objects.filter(category_id=current_category, is_done=True).count()
-            incompleted_tasks = Task.objects.filter(category_id=current_category, is_done=False).count()
-        except Task.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+    def get(self, request, category_id, format=None):
+        """ Returning category statistics based on related tasks """
+
+        category = get_object_or_404(Category, id=category_id)
+
+        tasks = Task.objects.filter(category=category).count()
 
         data = {
             'tasks_count': tasks,
-            'tasks_done': tasks_done,
-            'incompleted_tasks': incompleted_tasks
+            'completed_tasks': category.get_completed_tasks(),
+            'incompleted_tasks': category.get_incomplete_tasks()
         }
+
+        """
+        Calling a permission check before return Response
+        """
+        self.check_object_permissions(request, category)
 
         return Response(data)
 

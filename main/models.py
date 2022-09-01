@@ -25,9 +25,16 @@ class Category(models.Model):
         ordering = ['name']
 
     def get_incomplete_tasks(self):
-        count = Task.objects.filter(category__id=self.id, is_done=False).count()
+        """
+        Returns incomplete tasks related to the Category object
+        """
+        return Task.objects.filter(category__id=self.id, is_done=False).count()
 
-        return count
+    def get_completed_tasks(self):
+        """
+        Returns completed tasks related to the Category object
+        """
+        return Task.objects.filter(category__id=self.id, is_done=True).count()
 
 
 class Priority(models.Model):

@@ -10,7 +10,7 @@ router.register(r'tasks', TaskViewSet, basename='tasks')
 router.register(r'priorities', PriorityViewSet, basename='priorities')
 
 urlpatterns = [
-    path('category_statistic/', TaskStatistic.as_view())
+    path('category_statistic/<int:category_id>/', TaskStatistic.as_view())
 ]
 
 urlpatterns += router.urls
