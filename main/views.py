@@ -4,6 +4,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, filters, status
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -65,12 +66,13 @@ class PriorityViewSet(viewsets.ModelViewSet):
 
 
 class TaskStatistic(APIView):
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None):
         current_category = request.query_params.get("category", None)
         try:
             tasks = Task.objects.filter(category_id=current_category).count()
-            tasks_done = Task.objctes.filter(category_id=current_category, is_done=True).count()
+            tasks_done = Task.objects.filter(category_id=current_category, is_done=True).count()
             incompleted_tasks = Task.objects.filter(category_id=current_category, is_done=False).count()
         except Task.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
