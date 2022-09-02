@@ -29,7 +29,7 @@ class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = '__all__'
-        read_only_fields = ('id', 'created_at', 'owner', 'is_done')
+        read_only_fields = ('id', 'created_at', 'owner')
 
     def create(self, validated_data):
         request = self.context.get('request')
@@ -63,3 +63,10 @@ class PrioritySerializer(serializers.ModelSerializer):
 
         priority.save()
         return priority
+
+    def validate(self, data):
+        if Priority.objects.filter(name=data['name']).exists():
+            raise serializers.ValidationError({
+                'name': 'Current priority name is exist'
+            })
+        return data
