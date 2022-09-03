@@ -64,9 +64,11 @@ class PrioritySerializer(serializers.ModelSerializer):
         priority.save()
         return priority
 
-    def validate(self, data):
-        if Priority.objects.filter(name=data['name']).exists():
-            raise serializers.ValidationError({
-                'name': 'Current priority name is exist'
-            })
-        return data
+    def validate(self, attrs):
+        request = self.context.get('request')
+        if attrs.get('name'):
+            if Priority.objects.filter(name=attrs['name'], owner=request.user).exists():
+                raise serializers.ValidationError({
+                    'name': 'Current priority name is exist'
+                })
+        return attrs
