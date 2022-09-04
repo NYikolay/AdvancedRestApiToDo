@@ -82,9 +82,14 @@ class TaskStatistic(APIView):
             """ Returning category statistics based on related tasks """
             category = get_object_or_404(Category, id=category_id)
             tasks = Task.objects.filter(category=category).count()
-
-            completed_percent = int((category.get_completed_tasks() / tasks) * 100)
-            incompleted_percent = int((category.get_incomplete_tasks() / tasks) * 100)
+            if category.get_completed_tasks() > 0:
+                completed_percent = int((category.get_completed_tasks() / tasks) * 100)
+            else:
+                completed_percent = 0
+            if category.get_incomplete_tasks() > 0:
+                incompleted_percent = int((category.get_incomplete_tasks() / tasks) * 100)
+            else:
+                incompleted_percent = 0
 
             data = {
                 'tasks_count': tasks,
