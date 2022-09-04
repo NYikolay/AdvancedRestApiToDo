@@ -13,8 +13,15 @@ def get_all_statistic(request: HttpRequest) -> dict:
     completed_tasks = Task.objects.filter(owner=request.user, is_done=True).count()
     incompleted_tasks = Task.objects.filter(owner=request.user, is_done=False).count()
 
-    completed_percent = int((completed_tasks / tasks) * 100)
-    incompleted_percent = int((incompleted_tasks / tasks) * 100)
+    if completed_tasks > 0:
+        completed_percent = int((completed_tasks / tasks) * 100)
+    else:
+        completed_percent = 0
+
+    if incompleted_tasks > 0:
+        incompleted_percent = int((incompleted_tasks / tasks) * 100)
+    else:
+        incompleted_percent = 0
 
     data = {
         'tasks_count': tasks,
