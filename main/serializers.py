@@ -65,6 +65,9 @@ class PrioritySerializer(serializers.ModelSerializer):
         return priority
 
     def validate(self, attrs):
+        """
+        If a priority is created or updated, it checks for the existence of the name in the database
+        """
         request = self.context.get('request')
         if attrs.get('name'):
             if Priority.objects.filter(name=attrs['name'], owner=request.user).exists():

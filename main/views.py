@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
 
 from rest_framework import viewsets, filters, status
@@ -14,6 +13,9 @@ from main.permissions import IsOwner
 from main.serializers import CategorySerializer, TaskSerializer, PrioritySerializer
 
 import json
+
+from main.services.get_category_statistic import get_all_statistic
+from main.services.paginations import PaginationTasks
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -32,6 +34,7 @@ class TaskViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filter_fields = ['is_done', 'priority']
     search_fields = ['name']
+    pagination_class = PaginationTasks
 
     def get_queryset(self):
         """
@@ -69,23 +72,30 @@ class PriorityViewSet(viewsets.ModelViewSet):
 class TaskStatistic(APIView):
     permission_classes = (IsOwner, )
 
-    def get(self, request, category_id, format=None):
-        """ Returning category statistics based on related tasks """
+    def get(self, request, category_id: int, format=None):
 
-        category = get_object_or_404(Category, id=category_id)
+        if category_id == 0:
+            """ Return statistic for all categories """
+            data = get_all_statistic(request)
+        else:
+            """ Returning category statistics based on related tasks """
+            category = get_object_or_404(Category, id=category_id)
+            tasks = Task.objects.filter(category=category).count()
 
-        tasks = Task.objects.filter(category=category).count()
+            completed_percent = int((category.get_completed_tasks() / tasks) * 100)
+            incompleted_percent = int((category.get_incomplete_tasks() / tasks) * 100)
 
-        data = {
-            'tasks_count': tasks,
-            'completed_tasks': category.get_completed_tasks(),
-            'incompleted_tasks': category.get_incomplete_tasks()
-        }
-
-        """
-        Calling a permission check before return Response
-        """
-        self.check_object_permissions(request, category)
+            data = {
+                'tasks_count': tasks,
+                'completed_tasks': category.get_completed_tasks(),
+                'incompleted_tasks': category.get_incomplete_tasks(),
+                'completed_percent': completed_percent,
+                'incompleted_percent': incompleted_percent
+            }
+            """
+            Calling a permission check before return Response
+            """
+            self.check_object_permissions(request, category)
 
         return Response(data)
 

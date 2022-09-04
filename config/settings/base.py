@@ -110,7 +110,7 @@ DATABASES = {'default': dj_database_url.config(default='sqlite:///db_sqlite3', c
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
 }
 
 SIMPLE_JWT = {
