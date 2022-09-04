@@ -2,7 +2,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from rest_framework import viewsets, filters, status
 from rest_framework.decorators import action
-from rest_framework.filters import SearchFilter
+from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -31,9 +31,10 @@ class CategoryViewSet(viewsets.ModelViewSet):
 class TaskViewSet(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
     permission_classes = [IsOwner]
-    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filter_fields = ['is_done', 'priority']
     search_fields = ['name']
+    ordering_fields = ['name', 'due_date', 'priority', 'category']
     pagination_class = PaginationTasks
 
     def get_queryset(self):
