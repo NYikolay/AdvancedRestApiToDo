@@ -83,7 +83,7 @@ class Task(models.Model):
     class Meta:
         verbose_name = 'Задание'
         verbose_name_plural = 'Задания'
-        ordering = ['name']
+        ordering = ['-created_at']
 
     def get_incomplete_tasks(self):
         count = Task.objects.filter(category__id=self.id, is_done=False).count()
