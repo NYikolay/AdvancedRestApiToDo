@@ -43,8 +43,16 @@ class TaskViewSet(viewsets.ModelViewSet):
         on the current category otherwise it returns all tasks of the current user
         """
         category = self.request.query_params.get('category')
+        is_done = self.request.query_params.get('is_done')
+        priority = self.request.query_params.get('priority')
         if category:
             return Task.objects.filter(owner=self.request.user, category__id=category)
+        elif is_done and priority is not None:
+            return Task.objects.filter(owner=self.request.user, is_done=is_done, priority=priority)
+        elif is_done is not None:
+            return Task.objects.filter(owner=self.request.user, is_done=is_done)
+        elif priority is not None:
+            return Task.objects.filter(owner=self.request.user, priority=priority)
         else:
             return self.request.user.owner_tasks.all()
 
