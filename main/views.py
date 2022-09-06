@@ -14,7 +14,7 @@ from main.serializers import CategorySerializer, TaskSerializer, PrioritySeriali
 
 import json
 
-from main.services.get_category_statistic import get_all_statistic
+from main.services.get_category_statistic import get_all_statistic, get_statistic_by_category
 from main.services.paginations import PaginationTasks
 
 
@@ -82,22 +82,8 @@ class TaskStatistic(APIView):
             """ Returning category statistics based on related tasks """
             category = get_object_or_404(Category, id=category_id)
             tasks = Task.objects.filter(category=category).count()
-            if category.get_completed_tasks() > 0:
-                completed_percent = int((category.get_completed_tasks() / tasks) * 100)
-            else:
-                completed_percent = 0
-            if category.get_incomplete_tasks() > 0:
-                incompleted_percent = int((category.get_incomplete_tasks() / tasks) * 100)
-            else:
-                incompleted_percent = 0
+            data = get_statistic_by_category(category, tasks_count=tasks)
 
-            data = {
-                'tasks_count': tasks,
-                'completed_tasks': category.get_completed_tasks(),
-                'incompleted_tasks': category.get_incomplete_tasks(),
-                'completed_percent': completed_percent,
-                'incompleted_percent': incompleted_percent
-            }
             """
             Calling a permission check before return Response
             """

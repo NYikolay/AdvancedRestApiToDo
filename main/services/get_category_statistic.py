@@ -34,3 +34,24 @@ def get_all_statistic(request: HttpRequest) -> dict:
     return data
 
 
+def get_statistic_by_category(category, tasks_count: int) -> dict:
+    if category.get_completed_tasks() > 0:
+        completed_percent = int((category.get_completed_tasks() / tasks_count) * 100)
+    else:
+        completed_percent = 0
+    if category.get_incomplete_tasks() > 0:
+        incompleted_percent = int((category.get_incomplete_tasks() / tasks_count) * 100)
+    else:
+        incompleted_percent = 0
+
+    data = {
+        'tasks_count': tasks_count,
+        'completed_tasks': category.get_completed_tasks(),
+        'incompleted_tasks': category.get_incomplete_tasks(),
+        'completed_percent': completed_percent,
+        'incompleted_percent': incompleted_percent
+    }
+
+    return data
+
+

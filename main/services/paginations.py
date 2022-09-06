@@ -8,5 +8,8 @@ class PaginationTasks(PageNumberPagination):
     max_page_size = 25
 
     def get_paginated_response(self, data):
-        return Response(data, headers={'count': self.page.paginator.count})
+        return Response({
+            'count': self.page.paginator.count,
+            'results': data
+        })
 

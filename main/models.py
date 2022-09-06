@@ -75,7 +75,7 @@ class Task(models.Model):
                                  verbose_name='Приоритет задачи')
     due_date = models.DateField('Срок выполнения')
     is_done = models.BooleanField('Выполнено ли задание')
-    created_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'Владелец {self.owner.email}, название {self.name}'
