@@ -74,7 +74,7 @@ class Task(models.Model):
                                  null=True,
                                  verbose_name='Приоритет задачи')
     due_date = models.DateField('Срок выполнения')
-    is_done = models.BooleanField('Выполнено ли задание')
+    is_done = models.BooleanField('Выполнено ли задание', default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -84,10 +84,5 @@ class Task(models.Model):
         verbose_name = 'Задание'
         verbose_name_plural = 'Задания'
         ordering = ['-created_at']
-
-    def get_incomplete_tasks(self):
-        count = Task.objects.filter(category__id=self.id, is_done=False).count()
-
-        return count
 
 

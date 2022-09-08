@@ -13,16 +13,6 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = ['name', 'id', 'get_incomplete_tasks']
         read_only_fields = ('id',)
 
-    def create(self, validated_data):
-        request = self.context.get('request')
-        category = Category.objects.create(
-            name=validated_data['name'],
-            owner=request.user
-        )
-
-        category.save()
-        return category
-
 
 class TaskSerializer(serializers.ModelSerializer):
 
@@ -31,20 +21,6 @@ class TaskSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ('id', 'created_at', 'owner')
 
-    def create(self, validated_data):
-        request = self.context.get('request')
-        category = Task.objects.create(
-            name=validated_data['name'],
-            owner=request.user,
-            category=validated_data['category'],
-            priority=validated_data['priority'],
-            due_date=validated_data['due_date'],
-            is_done=False,
-        )
-
-        category.save()
-        return category
-
 
 class PrioritySerializer(serializers.ModelSerializer):
 
@@ -52,17 +28,6 @@ class PrioritySerializer(serializers.ModelSerializer):
         model = Priority
         fields = '__all__'
         read_only_fields = ('id', 'owner')
-
-    def create(self, validated_data):
-        request = self.context.get('request')
-        priority = Priority.objects.create(
-            name=validated_data['name'],
-            owner=request.user,
-            color=validated_data['color'],
-        )
-
-        priority.save()
-        return priority
 
     def validate(self, attrs):
         """
