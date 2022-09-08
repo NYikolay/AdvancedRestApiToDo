@@ -28,13 +28,13 @@ class Category(models.Model):
         """
         Returns incomplete tasks related to the Category object
         """
-        return Task.objects.filter(category__id=self.id, is_done=False).count()
+        return self.tasks.filter(is_done=False).count()
 
     def get_completed_tasks(self):
         """
         Returns completed tasks related to the Category object
         """
-        return Task.objects.filter(category__id=self.id, is_done=True).count()
+        return self.tasks.filter(is_done=True).count()
 
 
 class Priority(models.Model):
