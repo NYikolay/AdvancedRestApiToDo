@@ -7,3 +7,10 @@ An application for creating tasks to be performed with the possibility of regist
 ____
 
 
+#### Development tools
+
+<span>`Django`</span>
+<span>`DjangoRestFramework`</span>
+<span>`Heroku`</span>
+<span>`PostgreSQL`</span>
+
