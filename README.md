@@ -7,11 +7,20 @@ An application for creating tasks to be performed with the possibility of regist
 
 ____
 
-#### Development tools
+### Development tools:
 
 <span>`Python`</span>
 <span>`Django`</span>
 <span>`DjangoRestFramework`</span>
 <span>`Heroku`</span>
 <span>`PostgreSQL`</span>
+
+___
+
+### Links:
+
+1. Current application (deploy Vercel): https://todo-app-eta-sable.vercel.app/login 
+2. Heroku server: https://dou-todo-app.herokuapp.com/
+3. Swagger API documentation: https://dou-todo-app.herokuapp.com/api/v1/swagger/schema/
+4. Front (React, redux) repository: https://github.com/Osbourne34/Todo-app
 
