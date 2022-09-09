@@ -22,5 +22,5 @@ ___
 1. Current application (deploy Vercel): https://todo-app-eta-sable.vercel.app/login 
 2. Heroku server: https://dou-todo-app.herokuapp.com/
 3. Swagger API documentation: https://dou-todo-app.herokuapp.com/api/v1/swagger/schema/
-4. Front (React, redux) repository: https://github.com/Osbourne34/Todo-app
+4. Front (React, redux, typescript) repository: https://github.com/Osbourne34/Todo-app
 
