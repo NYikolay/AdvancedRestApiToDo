@@ -11,31 +11,21 @@ def get_all_statistic(request: HttpRequest) -> dict:
     """
     tasks = request.user.owner_tasks.values('is_done').annotate(count=Count('is_done'))
 
-    completed_tasks = 0
-    incompleted_tasks = 0
+    tasks_ = {task['is_done']: task['count'] for task in tasks}
 
-    for item in tasks:
-        if item.get('is_done'):
-            completed_tasks = item.get('count')
-        else:
-            incompleted_tasks = item.get('count')
+    tasks_count = tasks_[True] + tasks_[False]
 
-    tasks_count = completed_tasks + incompleted_tasks
-
-    if completed_tasks > 0:
-        completed_percent = int((completed_tasks / tasks_count) * 100)
+    if tasks_count > 0:
+        completed_percent = int((tasks_[True] / tasks_count) * 100)
+        incompleted_percent = int((tasks_[False] / tasks_count) * 100)
     else:
         completed_percent = 0
-
-    if incompleted_tasks > 0:
-        incompleted_percent = int((incompleted_tasks / tasks_count) * 100)
-    else:
         incompleted_percent = 0
 
     data = {
         'tasks_count': tasks_count,
-        'completed_tasks': completed_tasks,
-        'incompleted_tasks': incompleted_tasks,
+        'completed_tasks': tasks_[True],
+        'incompleted_tasks': tasks_[False],
         'completed_percent': completed_percent,
         'incompleted_percent': incompleted_percent
     }

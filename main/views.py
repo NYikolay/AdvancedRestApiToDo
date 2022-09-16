@@ -7,7 +7,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from main.models import Category, Task
+from main.models import Category, Task, Priority
 from main.permissions import IsOwner
 from main.serializers import CategorySerializer, TaskSerializer, PrioritySerializer
 
@@ -75,6 +75,11 @@ class PriorityViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+
+    def create(self, request, *args, **kwargs):
+        if Priority.objects.filter(name=request.data.get('name'), owner=request.user).exists():
+            return Response('current priority exist')
+        return super().create(request, *args, **kwargs)
 
 
 class TaskStatistic(APIView):

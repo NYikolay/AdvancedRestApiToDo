@@ -52,6 +52,9 @@ class Priority(models.Model):
         verbose_name = 'Приоритет'
         verbose_name_plural = 'Приоритеты'
         ordering = ['name']
+        constraints = [
+            models.UniqueConstraint(fields=['name', 'owner'], name='unique_user_priority')
+        ]
 
 
 class Task(models.Model):
